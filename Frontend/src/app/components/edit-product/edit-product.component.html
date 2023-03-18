@@ -1,0 +1,44 @@
+<div class="card text-center">
+  <div class="card-header">Edit Product Details</div>
+  <div class="card-body" [formGroup]="form">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Name</span>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Name"
+        formControlName="Name"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon2">Amount</span>
+      </div>
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Amount"
+        formControlName="AmountAvailable"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon2">Cost</span>
+      </div>
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Cost"
+        formControlName="Cost"
+      />
+    </div>
+
+    <button (click)="editProduct()" class="btn btn-success" [disabled]="form.invalid">Save</button>
+  </div>
+  <div class="card-footer text-muted">
+    
+    <a (click)="backToProducts()" class="btn btn-primary">Back to Products</a>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="card text-center">
+  <div class="card-header">Product Details</div>
+  <div class="card-body">
+    <h5 class="card-title">Name: {{ product.Name }}  </h5>
+    <p class="card-text">
+      Cost: {{ product.Cost }} - SellerId: {{ product.SellerId }}
+    </p>
+    <a (click)="backToProducts()" class="btn btn-primary">Back to Products</a>
+  </div>
+  <div class="card-footer text-muted">Amount Available: {{product.AmountAvailable}}</div>
+</div>
