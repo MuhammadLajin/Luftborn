@@ -5,6 +5,9 @@ namespace SharedDTO.ControllerDtos
     public class ProductDto
     {
 
+        [Range(1, int.MaxValue, ErrorMessage = "Value must be greater than {0}")]
+        public long Id { get; set; }
+        
         [Required(AllowEmptyStrings = false)]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Name { get; set; }
