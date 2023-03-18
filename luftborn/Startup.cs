@@ -34,18 +34,18 @@ namespace Luftborn
             #region Enable Cors
             services.AddCors(c =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());               
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
             #endregion
 
             #region Context
             services.AddDbContext<ApplicationDBContext>(option => option.UseSqlServer(Configuration.GetConnectionString("LuftbornCon"),
-                sqlServerOptionsAction : sqlOptions =>
-                {
-                    sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 15,
-                        maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                }
+                sqlServerOptionsAction: sqlOptions =>
+               {
+                   sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                   sqlOptions.EnableRetryOnFailure(maxRetryCount: 15,
+                       maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+               }
                 ).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             #endregion
 
@@ -57,11 +57,14 @@ namespace Luftborn
             #endregion
 
             //addSwaggerDocument
-            services.AddSwaggerDocument();
+            services.AddSwaggerDocument(settings =>
+            {
+                settings.Title = "Luftborn Product";
+            });
 
             services.AddControllers();
 
-            
+
 
             #region AutoMapper
             services.AddAutoMapper(typeof(UserMapping).Assembly);
@@ -69,12 +72,12 @@ namespace Luftborn
             #endregion
 
             #region Repo AddScoped
-            Type[] repositories = Assembly.Load(typeof(UserRepo).Assembly.GetName()).GetTypes().Where(r => r.IsClass && r.Name.EndsWith("Repo") ).ToArray();
-            Type[] iRepositories = Assembly.Load(typeof(IUserRepo).Assembly.GetName()).GetTypes().Where(r =>r.IsInterface && r.Name.EndsWith("Repo")).ToArray();
+            Type[] repositories = Assembly.Load(typeof(UserRepo).Assembly.GetName()).GetTypes().Where(r => r.IsClass && r.Name.EndsWith("Repo")).ToArray();
+            Type[] iRepositories = Assembly.Load(typeof(IUserRepo).Assembly.GetName()).GetTypes().Where(r => r.IsInterface && r.Name.EndsWith("Repo")).ToArray();
             foreach (var repoInterface in iRepositories)
             {
                 System.Type classType = repositories.FirstOrDefault(r => repoInterface.IsAssignableFrom(r));
-                if(classType != null)
+                if (classType != null)
                 {
                     services.AddScoped(repoInterface, classType);
                 }
@@ -107,7 +110,7 @@ namespace Luftborn
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                
+
                 app.UseOpenApi();
                 app.UseSwaggerUi3();
             }
