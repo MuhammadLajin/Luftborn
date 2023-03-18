@@ -7,9 +7,8 @@
 
 ### Getting Started
 ##### Fetch and pull solution
-##### start the solution it will download all dependency packages and build the application
-##### the application will seed the DB along with some data to be used for testing
-##### to test the API endpoints, use swagger interface with the given DTOs examples
+##### before starting the solution go to Package Manager Console and type "update-database" to create the local db
+##### build and run the application
 
 
 ### some contributions to be added
