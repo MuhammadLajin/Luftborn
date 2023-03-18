@@ -29,7 +29,7 @@ namespace ServiceLayer.Services
         }
 
         #region Methods
-        
+
         public async Task<ApiResponse<List<ProductDto>>> GetAllProducts()
         {
             ApiResponse<List<ProductDto>> response = new ApiResponse<List<ProductDto>>();
@@ -86,9 +86,15 @@ namespace ServiceLayer.Services
             return response;
         }
 
-        public async Task<ApiResponse<ProductDto>> CreateProduct(ProductDto productDto, long UserId)
+        public async Task<ApiResponse<ProductDto>> CreateProduct(CreateProductDto productDto, long UserId)
         {
-            var response = await IsValidProduct(productDto);
+            var response = await IsValidProduct(new ProductDto
+            {
+                Name = productDto.Name,
+                AmountAvailable = productDto.AmountAvailable,
+                Cost = productDto.Cost,
+                SellerId = productDto.SellerId
+            });
 
             #region Validations
             if (!IsCreatedseller(productDto.SellerId, UserId))
@@ -125,9 +131,14 @@ namespace ServiceLayer.Services
 
         public async Task<ApiResponse<ProductDto>> UpdateProduct(UpdateProductDto productDto, long UserId)
         {
-            var response = await IsValidProduct(new ProductDto { Name=productDto.Name, AmountAvailable = productDto.AmountAvailable, Cost = productDto.Cost, 
-                SellerId = productDto.SellerId });
-            
+            var response = await IsValidProduct(new ProductDto
+            {
+                Name = productDto.Name,
+                AmountAvailable = productDto.AmountAvailable,
+                Cost = productDto.Cost,
+                SellerId = productDto.SellerId
+            });
+
             #region Validations
             if (!IsCreatedseller(productDto.SellerId, UserId))
             {
@@ -160,20 +171,20 @@ namespace ServiceLayer.Services
                 else
                 {
                     response.Status = (int)SharedEnums.ApiResponseStatus.NotFound;
-                }                
+                }
             }
             catch (Exception ex)
             {
                 HandleExceptionResponse(response, ex.InnerException.ToString());
             }
-            
+
             return response;
         }
 
         public async Task<ApiResponse<bool>> DeleteProduct(long id, long UserId)
         {
             ApiResponse<bool> response = new ApiResponse<bool>();
-            
+
             try
             {
                 Product DeleteProduct = await ProductRepo.GetById(id);
@@ -196,11 +207,11 @@ namespace ServiceLayer.Services
                         response.Datalist = true;
                         response.TotalCount = 1;
                         response.Status = (int)SharedEnums.ApiResponseStatus.Success;
-                    }                    
+                    }
                 }
                 else
                 {
-                    response.Status = (int)SharedEnums.ApiResponseStatus.NotFound;                    
+                    response.Status = (int)SharedEnums.ApiResponseStatus.NotFound;
                 }
 
             }
@@ -225,7 +236,7 @@ namespace ServiceLayer.Services
             {
                 response.IsValidReponse = false;
                 response.CommandMessage = "Seller Id Not Exist";
-                response.Status = (int) SharedEnums.ApiResponseStatus.NotFound;
+                response.Status = (int)SharedEnums.ApiResponseStatus.NotFound;
 
             }
             else if (productDto.AmountAvailable < 0 || productDto.Cost < 0)
@@ -240,7 +251,7 @@ namespace ServiceLayer.Services
         {
             return createdSeller == UserId;
         }
-        private void HandleExceptionResponse<T>(ApiResponse<T> response, string message) 
+        private void HandleExceptionResponse<T>(ApiResponse<T> response, string message)
         {
             response.IsValidReponse = false;
             response.CommandMessage = $"error raised : {message}";

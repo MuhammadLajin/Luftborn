@@ -56,7 +56,7 @@ namespace Luftborn.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<ProductDto>>> CreateProduct(ProductDto productDto, [Required] long UserId)
+        public async Task<ActionResult<ApiResponse<ProductDto>>> CreateProduct(CreateProductDto productDto, [Required] long UserId)
         {
             try
             {
